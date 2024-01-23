@@ -37,7 +37,6 @@ jobs:
       - run:
           name: Run Tests
           command: |
-            cd jenkins_webhook
             python3 -m pytest
 
 workflows:

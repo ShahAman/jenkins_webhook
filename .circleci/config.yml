@@ -21,6 +21,7 @@ jobs:
           command: |
             git clone https://github.com/ShahAman/jenkins_webhook.git
             cd jenkins_webhook
+            python3 -m pip install -r requirements.txt
             python3 ops.py
 
   test:
@@ -37,6 +38,7 @@ jobs:
       - run:
           name: Run Tests
           command: |
+            python3 -m pip install pytest
             python3 -m pytest
 
 workflows:

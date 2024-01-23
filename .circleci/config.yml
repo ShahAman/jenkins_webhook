@@ -7,26 +7,38 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/python:3.9  # Use an image that includes Python
     steps:
       - checkout
+      - run:
+          name: Setup Python
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y python3
+
       - run:
           name: Checkout and Build
           command: |
             git clone https://github.com/ShahAman/jenkins_webhook.git
             cd jenkins_webhook
-            python ops.py
+            python3 ops.py
 
   test:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/python:3.9  # Use an image that includes Python
     steps:
       - checkout
+      - run:
+          name: Setup Python
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y python3
+
       - run:
           name: Run Tests
           command: |
             cd jenkins_webhook
-            python -m pytest
+            python3 -m pytest
 
 workflows:
   version: 2
@@ -36,3 +48,4 @@ workflows:
       - test:
           requires:
             - build
+

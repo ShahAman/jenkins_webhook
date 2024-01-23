@@ -1,9 +1,21 @@
 pipeline {
-    agent { docker { image 'python:3.12.1-alpine3.19' } }
+    agent any
+
     stages {
-        stage('build') {
+        stage('Checkout') {
             steps {
-                bat 'python --version'
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/ShahAman/jenkins_webhook.git']])
+            }
+        }
+        stage('Build') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ShahAman/jenkins_webhook.git'
+                bat 'python ops.py' 
+            }
+        }
+        stage('Test') {
+            steps {
+                bat 'python -m pytest' 
             }
         }
     }

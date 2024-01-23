@@ -3,45 +3,36 @@
 # See: https://circleci.com/docs/configuration-reference
 # Stacks detected: cicd:jenkins:.
 version: 2.1
+
 jobs:
-  test:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      # Replace this with a real test runner invocation
-      - run:
-          name: Run tests
-          command: echo 'replace me with real tests!' && false
   build:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
-      # Replace this with steps to build a package, or executable
       - run:
-          name: Build an artifact
-          command: touch example.txt
-      - store_artifacts:
-          path: example.txt
-  deploy:
+          name: Checkout and Build
+          command: |
+            git clone https://github.com/ShahAman/jenkins_webhook.git
+            cd jenkins_webhook
+            python ops.py
+
+  test:
     docker:
       - image: cimg/base:stable
     steps:
-      # Replace this with steps to deploy to users
+      - checkout
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
-      - run:
-          name: found jenkins config
-          command: ':'
+          name: Run Tests
+          command: |
+            cd jenkins_webhook
+            python -m pytest
+
 workflows:
-  example:
+  version: 2
+  build_and_test:
     jobs:
-      - test
-      - build:
+      - build
+      - test:
           requires:
-            - test
-      - deploy:
-          requires:
-            - test
+            - build

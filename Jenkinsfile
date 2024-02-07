@@ -10,6 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 git branch: 'main', url: 'https://github.com/ShahAman/jenkins_webhook.git'
+                bat 'python -m pip install -r requirements.txt'
                 bat 'python ops.py' 
             }
         }
